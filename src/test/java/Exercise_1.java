@@ -1,13 +1,15 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.concurrent.TimeUnit;
+import java.io.File;
+import java.io.IOException;
 
 public class Exercise_1 {
 
@@ -17,6 +19,8 @@ public class Exercise_1 {
     private WebDriverWait wait;
     private CheapticketsSearchPage searchPage;
     private String destino = "Miami Beach";
+    private CheapticketsResultPage resultPage;
+    private String hotelSearch = "fae";
 
     @BeforeClass
     public void testSetUp() {
@@ -26,7 +30,7 @@ public class Exercise_1 {
     }
 
     @Test
-    public void hotelSearch(){
+    public void hotelSearch() throws InterruptedException {
         driver.navigate().to(url);
         cheapT.getHotel().click();
         searchPage = new CheapticketsSearchPage(driver);
@@ -39,8 +43,45 @@ public class Exercise_1 {
         wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("hotel-1-age-select-1-hlp"))));
         searchPage.setAge("7");
         searchPage.getSearch().click();
+        driver.manage().window().maximize();
+        //need to wait for the modal to appear, ask why the wait.until doesnt work
+        Thread.sleep(32000);
+        //wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.className("modal-body"))));
+        driver.findElement(By.id("modalCloseButton")).click();
+        resultPage = new CheapticketsResultPage(driver);
+        System.out.println(resultPage.getTitle().getText());
+
+        /* Assert quantity */
+        takeScreensShot(driver, "quantity.png");
+        Assert.assertTrue(resultPage.checkQuantity());
+
+        /*Assert location */
+        takeScreensShot(driver, "location.png");
+        Assert.assertTrue(resultPage.checkLocation());
+
+        /*Assert Faena Hotel search*/
+        resultPage.searchHotel(hotelSearch);
+        Thread.sleep(3000);
+        takeScreensShot(driver, "faenaHotel.png");
+        Assert.assertTrue(resultPage.checkFaena());
 
 
+    }
+
+    @AfterTest
+    public void tearDown(){
+
+        driver.quit();
+
+    }
+
+    private void takeScreensShot (WebDriver driver, String name){
+        File src = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(src,new File("/media/lucas/DATA/Globant/Final test/img/"+name));
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
     }
 
 }
