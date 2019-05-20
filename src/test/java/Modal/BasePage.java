@@ -11,7 +11,7 @@ public class BasePage {
     public BasePage(WebDriver driver) {
         this.driver = driver;
         //Long wait for the modal
-        wait = new WebDriverWait(driver, 60);
+        wait = new WebDriverWait(driver, 90);
         PageFactory.initElements(driver, this);
     }
 

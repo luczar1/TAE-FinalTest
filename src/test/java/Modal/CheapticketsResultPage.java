@@ -39,8 +39,9 @@ public class CheapticketsResultPage extends BasePage {
     public void searchHotel(String hotel) {
         new Actions(getDriver()).moveToElement(propName).perform();
         propName.sendKeys(hotel);
-        //propName.click();
-        //propName.sendKeys("n");
+        new Actions(getDriver()).moveToElement(propName).perform();
+        propName.click();
+        propName.sendKeys("n");
 
         if (getDriver().findElement(By.id("taHotelsResultsContainer")) != null) {
             getDriver().findElement(By.className("results-item")).click();
@@ -79,7 +80,7 @@ public class CheapticketsResultPage extends BasePage {
     }
 
     public boolean checkFaena() {
-        int results = getDriver().findElement(By.id("resultsContainer")).findElements(By.tagName("aticle")).size();
+        int results = getDriver().findElements(By.id("resultsContainer")).size();
 
         if (results > 0){
             System.out.println("Faena Hotel found");
