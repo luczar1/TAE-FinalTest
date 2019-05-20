@@ -1,3 +1,6 @@
+import Modal.CheapticketsHomePage;
+import Modal.CheapticketsResultPage;
+import Modal.CheapticketsSearchPage;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -44,9 +47,7 @@ public class Exercise_1 {
         searchPage.setAge("7");
         searchPage.getSearch().click();
         driver.manage().window().maximize();
-        //need to wait for the modal to appear, ask why the wait.until doesnt work
-        Thread.sleep(32000);
-        //wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.className("modal-body"))));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("modal-body")));
         driver.findElement(By.id("modalCloseButton")).click();
         resultPage = new CheapticketsResultPage(driver);
         System.out.println(resultPage.getTitle().getText());

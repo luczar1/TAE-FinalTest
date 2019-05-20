@@ -1,6 +1,9 @@
+package Modal;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 
@@ -34,10 +37,10 @@ public class CheapticketsResultPage extends BasePage {
     }
 
     public void searchHotel(String hotel) {
-        propName.click();
+        new Actions(getDriver()).moveToElement(propName).perform();
         propName.sendKeys(hotel);
-        propName.click();
-        propName.sendKeys("n");
+        //propName.click();
+        //propName.sendKeys("n");
 
         if (getDriver().findElement(By.id("taHotelsResultsContainer")) != null) {
             getDriver().findElement(By.className("results-item")).click();
